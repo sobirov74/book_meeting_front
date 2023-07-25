@@ -17,14 +17,14 @@ const EventComponent: React.FC<{ event: MyEvent }> = ({ event }) => {
 };
 
 const MyCalendar: React.FC = () => {
-  const { data: reservations } = useReservations({ id: 1 });
+  const { data: reservations } = useReservations({ room_id: 1 });
 
   moment.locale();
 
   const localizer = momentLocalizer(moment);
 
   const mapReserves = useMemo(() => {
-    const edited = reservations?.map((reservation) => ({
+    const edited = reservations?.map(reservation => ({
       id: reservation.id,
       title: reservation.title,
       start: new Date(reservation.from_time),

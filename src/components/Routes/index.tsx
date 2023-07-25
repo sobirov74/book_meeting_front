@@ -1,45 +1,29 @@
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import tokenMutation from "src/hooks/mutation/tokenMutation";
-import { tokenHandler } from "src/redux/reducers/authReducer";
-import { useAppDispatch } from "src/redux/utils/types";
-import { successToast } from "src/utils/toast";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import CalendarScreen from "src/pages/Calendar";
+import Login from "src/pages/Login";
+import Main from "src/pages/Main";
+import { tokenSelector } from "src/redux/reducers/authReducer";
+import { useAppSelector } from "src/redux/utils/types";
 
-const Routes = () => {
-  const dispatch = useAppDispatch();
-  const responceError = () => {
-    console.log("error");
-  };
+const Navigations = () => {
+  const token = useAppSelector(tokenSelector);
 
-  const { mutate } = tokenMutation();
+  const navigate = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      mutate(
-        { code: tokenResponse.access_token },
-        {
-          onSuccess: () => {
-            dispatch(tokenHandler(tokenResponse.access_token)); //todo
-            successToast("token saved");
-          },
-        }
-      );
-    },
-  });
+  useEffect(() => {
+    if (token) navigate("/login");
+  }, [token]);
+
   return (
     <div className="App">
-      <h1>Google calendar api</h1>
-
-      <div>
-        <GoogleLogin
-          onSuccess={() => null}
-          onError={responceError}
-          useOneTap
-          auto_select
-        />
-        <button onClick={() => login()}>Sign in with Google 🚀 </button>;
-      </div>
+      <Routes>
+        <Route element={<Main />} path={"/"} />
+        <Route element={<Login />} path={"/login"} />
+        <Route element={<CalendarScreen />} path={"/calendar"} />
+      </Routes>
     </div>
   );
 };
 
-export default Routes;
+export default Navigations;

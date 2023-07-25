@@ -1,8 +1,4 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  CancelTokenSource,
-} from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource } from "axios";
 import { Store } from "redux";
 import { RootState } from "src/redux/rootConfig";
 
@@ -23,14 +19,11 @@ class BaseAPIClient {
     this.cancelTokenSource = axios.CancelToken.source();
     this.axiosInstance = axios.create({
       baseURL,
-      timeout: 3000,
+      timeout: 5000,
     });
     this.store = store;
 
-    this.axiosInstance.interceptors.request.use(
-      this.handleRequestSuccess,
-      this.handleRequestError
-    );
+    this.axiosInstance.interceptors.request.use(this.handleRequestSuccess, this.handleRequestError);
   }
 
   private handleRequestSuccess = (config: any): any => {
@@ -56,13 +49,7 @@ class BaseAPIClient {
     return this.axiosInstance.get<T>(fullUrl, config);
   }
 
-  public post<T>({
-    url,
-    body,
-    params,
-    config,
-    contentType = "application/json",
-  }: BaseUrlParams) {
+  public post<T>({ url, body, params, config, contentType = "application/json" }: BaseUrlParams) {
     const fullUrl = this.buildUrlWithParams(url, params);
     config = config || {};
     config.headers = {
@@ -72,13 +59,7 @@ class BaseAPIClient {
     return this.axiosInstance.post<T>(fullUrl, body, config);
   }
 
-  public put<T>({
-    url,
-    body,
-    params,
-    config,
-    contentType = "application/json",
-  }: BaseUrlParams) {
+  public put<T>({ url, body, params, config, contentType = "application/json" }: BaseUrlParams) {
     const fullUrl = this.buildUrlWithParams(url, params);
     return this.axiosInstance.put<T>(fullUrl, body, config);
   }
@@ -94,10 +75,7 @@ class BaseAPIClient {
 
     const queryParams = Object.entries(params)
       .filter(([_, value]) => value !== undefined) // Exclude undefined parameters
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
       .join("&");
 
     if (url.includes("?")) {

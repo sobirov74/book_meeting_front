@@ -22,7 +22,7 @@
       "src/*": ["./src/*"],
       "pages/*": ["./src/pages/*"],
       "assets/*": ["./src/assets/*"],
-      "src/components/*": ["./src/components/*"]
+      "components/*": ["./src/components/*"]
     },
 
     /* Linting */
